@@ -1,0 +1,14 @@
+Third-party sources
+
+vLLM 0.10.1.1 (Apache-2.0), bundled with KeyChunk changes in vendor/vllm:
+https://github.com/vllm-project/vllm/tree/1da94e673c257373280026f75ceb4effac80e892
+Original notices and vendor/vllm/source_manifest.json are retained.
+
+Native rotary kernels and headers: LMCache and vLLM (Apache-2.0).
+https://github.com/LMCache/LMCache/tree/dev/csrc
+License: licenses/Apache-2.0.txt; source notices are retained.
+
+FlashRAG 0.3.0.dev0 (MIT, optional dependency):
+https://github.com/RUC-NLPIR/FlashRAG/tree/7926ac3c3c5ce0781f53d60ebac48fc511abed12
+
+Data, corpora and weights follow their publishers' licenses.

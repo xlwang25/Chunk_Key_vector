@@ -1,0 +1,21 @@
+# Retain the bundled upstream source even under parent repository ignore rules.
+!/vendor/
+!/vendor/**
+/data/
+
+/.venv/
+/models/
+/results/
+/audit.json
+/validation.json
+**/.cache/
+**/__pycache__/
+*.pyc
+*.so
+*.o
+*.egg-info/
+.pytest_cache/
+/vendor/vllm/.deps/
+/vendor/vllm/build/
+/vendor/vllm/dist/
+/vendor/vllm/.eggs/

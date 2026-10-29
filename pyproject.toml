@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "keychunk"
+version = "0.1.0"
+description = "GPU page reuse and sequential performance experiments for vLLM"
+requires-python = ">=3.12,<3.13"
+dependencies = ["torch==2.7.1", "transformers==4.57.6", "numpy==2.2.6", "scikit-learn==1.8.0", "threadpoolctl>=3.1"]
+
+[project.optional-dependencies]
+retrieval = ["flashrag-dev @ git+https://github.com/RUC-NLPIR/FlashRAG.git@7926ac3c3c5ce0781f53d60ebac48fc511abed12", "faiss-cpu==1.10.0", "bm25s[core]==0.2.1", "PyStemmer>=2.2,<4", "datasets==3.6.0", "huggingface-hub>=0.34,<1"]
+
+[tool.setuptools]
+license-files = ["licenses/Apache-2.0.txt", "NOTICE"]
+
+[tool.setuptools.packages.find]
+include = ["keychunk*"]
+
+[project.scripts]
+keychunk = "keychunk.cli:main"
+
+[tool.setuptools.package-data]
+"keychunk.runtime" = ["native/*.cpp", "native/*.cu", "native/*.h"]
