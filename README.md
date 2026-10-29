@@ -2,7 +2,7 @@
 
 基于 vLLM 的 GPU page 复用与选择性重算。
 
-主实验入口：[GPU page 串行性能实验](examples/gpu_page_serial.py)。另提供 QA 质量实验。
+提供 [GPU page 串行性能实验](examples/gpu_page_serial.py)和 QA 质量实验。
 
 ## 安装
 
@@ -15,7 +15,7 @@ python -m pip install --upgrade pip
 bash scripts/install_runtime.sh
 ```
 
-## 主实验：GPU page 串行性能
+## 性能实验
 
 自行下载 [TopiOCQA 开发集](https://zenodo.org/records/7709644/files/topiocqa_dev.json)。以下入口可直接读取[官方 AllHistory 已检索开发集](https://zenodo.org/records/6153434/files/results/retriever/dpr/topiocqa_all_history_dev.json)，保存为 `data/topiocqa_all_history_dev.json`。
 
@@ -35,7 +35,7 @@ python examples/gpu_page_serial.py --model /path/to/model \
   --max-model-len 32768 --verify-reuse --output-dir results/gpu_page_check
 ```
 
-## 辅助实验：QA 质量
+## 质量实验
 
 ### 数据与检索
 

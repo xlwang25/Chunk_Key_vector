@@ -1,4 +1,4 @@
-"""Main GPU-page performance entrypoint: run caller-provided requests sequentially."""
+"""GPU-page performance entrypoint: run caller-provided requests sequentially."""
 from contextlib import ExitStack
 import json
 from itertools import islice
