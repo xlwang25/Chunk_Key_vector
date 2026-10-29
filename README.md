@@ -1,12 +1,12 @@
 # KeyChunk
 
-基于 vLLM 的 GPU page 复用与选择性重算。
+GPU page reuse and selective recomputation with vLLM.
 
-提供 [GPU page 串行性能实验](examples/gpu_page_serial.py)和 QA 质量实验。
+Includes [serial GPU page performance experiments](examples/gpu_page_serial.py) and QA quality experiments.
 
-## 安装
+## Installation
 
-需要 Linux、Python 3.12、CUDA 12.6 工具链和本地 Llama/Mistral 模型权重。
+Requires Linux, Python 3.12, the CUDA 12.6 toolkit, and local Llama/Mistral model weights.
 
 ```bash
 python3.12 -m venv .venv
@@ -15,11 +15,11 @@ python -m pip install --upgrade pip
 bash scripts/install_runtime.sh
 ```
 
-## 性能实验
+## Performance experiments
 
-自行下载 [TopiOCQA 开发集](https://zenodo.org/records/7709644/files/topiocqa_dev.json)。以下入口可直接读取[官方 AllHistory 已检索开发集](https://zenodo.org/records/6153434/files/results/retriever/dpr/topiocqa_all_history_dev.json)，保存为 `data/topiocqa_all_history_dev.json`。
+Download the [TopiOCQA development set](https://zenodo.org/records/7709644/files/topiocqa_dev.json) separately. For the script below, use the [official AllHistory development set with retrieved passages](https://zenodo.org/records/6153434/files/results/retriever/dpr/topiocqa_all_history_dev.json), saved as `data/topiocqa_all_history_dev.json`.
 
-单 GPU、单请求串行执行，保持输入顺序。先准备 KV，再运行。支持 JSON 数组或 JSONL，每条请求包含 `question` 和 `chunks` 或 `ctxs`。临时 KV 在结束后清理，结果保存在输出目录。
+Prepare KV, then run one request at a time on a single GPU in input order. Inputs can be a JSON array or JSONL, with `question` and `chunks` or `ctxs` in each record. Temporary KV files are removed after execution; results are saved in the output directory.
 
 ```bash
 python examples/gpu_page_serial.py --model /path/to/model \
@@ -27,7 +27,7 @@ python examples/gpu_page_serial.py --model /path/to/model \
   --max-model-len 32768 --output-dir results/gpu_page_serial
 ```
 
-检查实际 GPU 页读取：
+Check actual GPU page reads:
 
 ```bash
 python examples/gpu_page_serial.py --model /path/to/model \
@@ -35,11 +35,11 @@ python examples/gpu_page_serial.py --model /path/to/model \
   --max-model-len 32768 --verify-reuse --output-dir results/gpu_page_check
 ```
 
-## 质量实验
+## Quality experiments
 
-### 数据与检索
+### Data and retrieval
 
-自行下载 QA 数据、Wikipedia 语料和 [E5-base-v2](https://huggingface.co/intfloat/e5-base-v2) 权重。替换命令中的本地模型路径；执行时输入检索段落数。
+Download the QA data, Wikipedia corpus, and [E5-base-v2](https://huggingface.co/intfloat/e5-base-v2) weights. Replace the model paths with local directories and enter the number of passages to retrieve when prompted.
 
 ```bash
 python -m pip install -e '.[retrieval]'
@@ -47,25 +47,25 @@ python scripts/prepare_qa.py download --dataset all --output-dir data/raw
 python scripts/prepare_qa.py download-corpus --output data/wiki18_100w.jsonl
 python scripts/prepare_qa.py build-index --corpus data/wiki18_100w.jsonl \
   --retriever-model /path/to/e5-base-v2 --output-dir data/index --fp16
-read -r -p "检索段落数: " CHUNK_COUNT
+read -r -p "Number of retrieved passages: " CHUNK_COUNT
 python scripts/prepare_qa.py retrieve --input data/raw/nq/test.jsonl \
   --index-dir data/index --top-k "$CHUNK_COUNT" --output data/qa/nq.jsonl --fp16
 ```
 
-### 运行
+### Run
 
-以下以 NQ 为例，其他数据集使用相同入口。
+NQ example; use the same entrypoint for the other datasets.
 
 ```bash
 python examples/run_qa.py --model /path/to/model \
   --input data/qa/nq.jsonl --output-dir results/nq
 ```
 
-### 单条请求复用检查
+### Single-request reuse check
 
 ```bash
 python examples/gpu_reuse.py --model /path/to/model \
   --input data/qa/nq.jsonl --output-dir results/gpu_reuse
 ```
 
-第三方来源和许可见 [NOTICE](NOTICE)。
+Third-party sources and licenses: [NOTICE](NOTICE).
